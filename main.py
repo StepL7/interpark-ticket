@@ -262,7 +262,7 @@ def ChooseSeat():
 
             logging.info(f'进入了：{y}区')
             try:
-                elements = driver.find_elements(By.XPATH, "//*[@id='TmgsTable']/tbody/tr/td/span[not(@class='SeatR' or @class='SeatT') and @class!='']")
+                elements = driver.find_elements(By.XPATH, "//*[@id='TmgsTable']/tbody/tr/td/span[not(@class='SeatR' or @class='SeatT or @class='SeatB') and @class!='']")
 
                 elements[0].click()
                 # driver.find_elements(By.ID, 'Seats')[i].click()
