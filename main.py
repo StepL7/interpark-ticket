@@ -18,7 +18,8 @@ import re
 import traceback
 
 
-from info1 import *
+# from infodemo import *
+from info import *
 from SeatArea import *
 import logging
 import os

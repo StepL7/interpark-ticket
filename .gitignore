@@ -3,3 +3,4 @@ build/
 dist/
 *.png
 log/
+info.py
