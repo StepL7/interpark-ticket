@@ -54,6 +54,7 @@ main_url = "https://www.globalinterpark.com/main/main"
 # 登录地址
 login_url = "https://www.globalinterpark.com/user/signin?redirectUrl=aHR0cDovL3d3dy5nbG9iYWxpbnRlcnBhcmsuY29tL21haW4vbWFpbg=="
 # 抢购地址
+#target_url = "https://www.globalinterpark.com/detail/edetail?prdNo=23008837&dispNo=01011"
 target_url = "https://www.globalinterpark.com/detail/edetail?prdNo=23007165&dispNo=undefined"
 # 登录 打开抢购页面
 def Login():
@@ -82,7 +83,7 @@ def Booking():
 def Date(initCount):
     global CodeFlag
     # 选择观赏日期 默认选第二个
-    time.sleep(0.5)
+    # time.sleep(0.5)
     dateinnercount = 0
     # 这里高峰期会排队，所以一直循环就可以initCount 判断是第一次进来
     while True:
@@ -90,12 +91,16 @@ def Date(initCount):
             dateinnercount = dateinnercount + 1
             driver.switch_to.frame("ifrmBookStep")
             driver.find_elements(By.ID, 'CellPlayDate')[1].click()
+            # 如果还要选时间，这里就别注释，特别需要睡眠一会，不然点不动
+            # time.sleep(0.5)
+            # driver.find_elements(By.ID, 'CellPlaySeq')[0].click()
         except Exception as e:
             if initCount == 0:
                 continue
             # 可能是登录状态变了，或者超20分钟了
             raise e
         break
+    # 两次点击间要睡眠一会
     time.sleep(0.5)
     # 下一步
     driver.switch_to.parent_frame()
@@ -149,6 +154,7 @@ def Date(initCount):
 def IsCodeExist():
     try:
         global flag
+        flag = False
         flag = driver.find_element(By.ID, 'divRecaptcha').is_displayed()
         return flag
     except:
@@ -256,7 +262,9 @@ def ChooseSeat():
 
             logging.info(f'进入了：{y}区')
             try:
-                driver.find_elements("//span[starts-with(@class, 'Seat') and not(@class='SeatR' or @class='SeatT')]")[i].click()
+                elements = driver.find_elements(By.XPATH, "//*[@id='TmgsTable']/tbody/tr/td/span[not(@class='SeatR' or @class='SeatT') and @class!='']")
+
+                elements[0].click()
                 # driver.find_elements(By.ID, 'Seats')[i].click()
                 i += 1
                 m += 1
@@ -365,7 +373,7 @@ def InputInfo():
     # 联系电话
     driver.find_element(By.ID, "PhoneNo").send_keys(PhoneNo)
     # 手机号码
-    driver.find_element(By.ID, "HpNo").send_keys(HpNo1)
+    driver.find_element(By.ID, "HpNo").send_keys(HpNo)
     # 下一步
     driver.switch_to.parent_frame()
     driver.find_element(By.ID, "SmallNextBtnImage").click()
@@ -399,8 +407,8 @@ def Finaly():
     driver.find_element(By.ID, "CancelAgree").click()
     driver.find_element(By.ID, "CancelAgree2").click()
     # 付款
-    # driver.switch_to.parent_frame()
-    # driver.find_element(By.ID,"LargeNextBtnImage").click()
+    driver.switch_to.parent_frame()
+    driver.find_element(By.ID, "LargeNextBtnImage").click()
 
 def getErrorLine():
     # 获取异常信息
